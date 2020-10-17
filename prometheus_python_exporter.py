@@ -24,34 +24,29 @@ class CustomCollector(object):
 
         gauge.add_metric(["instance001.us.west.local"], 20)
 
-        return gauge
+        yield gauge
         
     def counter_res(self):
 
         counter = CounterMetricFamily("requests_sent", 'requests made')
         counter.add_metric(["example"], 2000)
         counter.inc()
-        return counter
+        yield counter
 
     def histogram_res(self):
 
     	histo = Histogram('histo_values','Description')
     	histo.observe(10)
 
-    	return histo
+    	yield histo
 
     def summary_res(self):
 
     	summary = Summary('summary_reponse', 'Description of summary')
     	s.observe(10)
 
-    	return summary
+    	yield summary
 
-    def collect(self):
-    	yield gauge_res()
-    	yield counter_res()
-    	yield histogram_res()
-    	yield summary_res()
 
 if __name__ == '__main__':
     start_http_server(METRICS_PORT)
@@ -59,6 +54,3 @@ if __name__ == '__main__':
     REGISTRY.register(CustomCollector(IP))
     while True:
     	time.sleep(1)
-
-    
-    
